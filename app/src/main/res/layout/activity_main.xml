@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome Semester 4"
@@ -17,12 +18,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="112dp"
-        android:layout_height="37dp"
-        android:text="Mulai"
-        tools:layout_editor_absoluteX="149dp"
-        tools:layout_editor_absoluteY="388dp" />
+        android:id="@+id/btnToFourth"
+        android:layout_width="145dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="400dp"
+        android:text="pertemuan 4
+        tools:layout_editor_absoluteX="
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
