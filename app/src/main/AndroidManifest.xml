@@ -14,9 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alyahapps">
         <activity
-            android:name=".pertemuan_5.Main2Activity"
-            android:exported="false" />
-        <activity
             android:name=".pertemuan_5.WebViewActivity"
             android:exported="false" />
         <activity
