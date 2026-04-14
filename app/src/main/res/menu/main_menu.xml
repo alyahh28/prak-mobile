@@ -13,5 +13,4 @@
         android:title="Settings"
         android:icon="@android:drawable/ic_menu_preferences"
         app:showAsAction="never" />
-
 </menu>

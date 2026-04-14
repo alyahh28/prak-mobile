@@ -20,9 +20,11 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:titleTextColor="@android:color/white"
-            app:subtitleTextColor="@android:color/white" />
+            app:subtitleTextColor="@android:color/white"
+            app:layout_scrollFlags="scroll|enterAlways"/>
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <!-- Konten scrollable -->
     <androidx.core.widget.NestedScrollView
@@ -38,8 +40,6 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
-            <!-- Tambahkan konten panjang supaya bisa di-scroll -->
-
             <Button
                 android:id="@+id/btnWebView"
                 android:layout_width="match_parent"
@@ -48,6 +48,7 @@
                 app:icon="@drawable/ic_add"
                 app:iconGravity="textStart"/>
 
+            <!-- Tambahkan konten panjang supaya bisa di-scroll -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

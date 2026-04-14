@@ -1,5 +1,4 @@
 package com.example.alyah_apps.pertemuan_4
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -62,7 +61,7 @@ class FourthActivity : AppCompatActivity() {
         }
 
         binding.btnKembali.setOnClickListener {
-            finish() // Gunakan finish() untuk kembali, jangan onDestroy() langsung
+            finish()
         }
     }
 
