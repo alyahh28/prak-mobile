@@ -1,4 +1,4 @@
-package com.example.alyah_apps.pertemuan_3
+package com.example.alyah_apps.Home.pertemuan_3
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

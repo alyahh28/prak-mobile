@@ -2,58 +2,66 @@ package com.example.alyah_apps
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.alyah_apps.R
-import com.example.alyah_apps.pertemuan_4.FourthActivity
-import com.example.alyah_apps.pertemuan_2.SecondActivity
-import com.example.alyah_apps.pertemuan_5.FifthActivity
-import com.example.alyah_apps.databinding.ActivityMainBinding
+import androidx.core.content.edit
+import com.example.alyah_apps.Home.pertemuan_2.SecondActivity
+import com.example.alyah_apps.Home.pertemuan_3.ThirdActivity
+import com.example.alyah_apps.Home.pertemuan_4.FourthActivity
+import com.example.alyah_apps.Home.pertemuan_5.FifthActivity
+import com.example.alyah_apps.Home.pertemuan_7.SeventhActivity
+import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // Pastikan layout yang dipanggil adalah activity_main yang baru saja diperbaiki
+        setContentView(R.layout.activity_main)
+
+        val sharedPref = getSharedPreferences("user_pref", MODE_PRIVATE)
+
+
+        findViewById<Button>(R.id.btnSecond).setOnClickListener {
+            startActivity(Intent(this, SecondActivity::class.java))
         }
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.apply {
-            title = "Activity Fifth"
-            subtitle = "Ini adalah subtitle"
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
+        findViewById<Button>(R.id.btnThird).setOnClickListener {
+            startActivity(Intent(this, ThirdActivity::class.java))
         }
 
-        binding.btnToSecond.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnFourth).setOnClickListener {
+            startActivity(Intent(this, FourthActivity::class.java))
         }
-//        val btnToFourth : Button = findViewById(R.id.btnButton)
 
-
-        binding.btnToFourth.setOnClickListener {
-            val intent = Intent(this, FourthActivity::class.java)
-
-            intent.putExtra("name", "Politeknik Caltex Riau")
-            intent.putExtra("from", "Rumbai")
-            intent.putExtra("age", 25)
-
-            startActivity(intent)
+        findViewById<Button>(R.id.btnLima).setOnClickListener {
+            startActivity(Intent(this, FifthActivity::class.java))
         }
-        binding.btnToFifth.setOnClickListener {
-            val intent = Intent(this, FifthActivity::class.java)
-            startActivity(intent)
+
+        // Pertemuan 7
+        findViewById<Button>(R.id.btnSeven).setOnClickListener {
+            startActivity(Intent(this, SeventhActivity::class.java))
+        }
+
+        // --- Logika Logout ---
+        val btnLogout = findViewById<Button>(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Logout")
+                .setMessage("Apakah Anda yakin ingin keluar?")
+                .setPositiveButton("Ya") { _, _ ->
+                    // Hapus Session
+                    sharedPref.edit { clear() }
+
+                    // Pindah ke AuthActivity (Login)
+                    val intent = Intent(this, AuthActivity::class.java)
+                    // Flag ini memastikan user tidak bisa tekan 'back' kembali ke MainActivity
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("Tidak", null)
+                .show()
         }
     }
 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_sky"
-    tools:context=".pertemuan_3.ThirdResultActivity">
+    tools:context=".Home.pertemuan_3.ThirdResultActivity">
 
     <TextView
         android:id="@+id/textView2"
