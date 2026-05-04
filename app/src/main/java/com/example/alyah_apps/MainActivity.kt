@@ -11,6 +11,7 @@ import com.example.alyah_apps.Home.pertemuan_3.ThirdActivity
 import com.example.alyah_apps.Home.pertemuan_4.FourthActivity
 import com.example.alyah_apps.Home.pertemuan_5.FifthActivity
 import com.example.alyah_apps.Home.pertemuan_7.SeventhActivity
+import com.example.alyah_apps.Home.pertemuna_9.NIneActivity
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
@@ -22,25 +23,30 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("user_pref", MODE_PRIVATE)
 
 
-        findViewById<Button>(R.id.btnSecond).setOnClickListener {
+        findViewById<Button>(R.id.btnToSecond).setOnClickListener {
             startActivity(Intent(this, SecondActivity::class.java))
         }
 
-        findViewById<Button>(R.id.btnThird).setOnClickListener {
+        findViewById<Button>(R.id.btnToThird).setOnClickListener {
             startActivity(Intent(this, ThirdActivity::class.java))
         }
 
-        findViewById<Button>(R.id.btnFourth).setOnClickListener {
+        findViewById<Button>(R.id.btnToFourth).setOnClickListener {
             startActivity(Intent(this, FourthActivity::class.java))
         }
 
-        findViewById<Button>(R.id.btnLima).setOnClickListener {
+        findViewById<Button>(R.id.btnToFifth).setOnClickListener {
             startActivity(Intent(this, FifthActivity::class.java))
         }
 
         // Pertemuan 7
-        findViewById<Button>(R.id.btnSeven).setOnClickListener {
+        findViewById<Button>(R.id.btnToSeventh).setOnClickListener {
             startActivity(Intent(this, SeventhActivity::class.java))
+        }
+
+        // Pertemuan 9
+        findViewById<Button>(R.id.btnToNine).setOnClickListener {
+            startActivity(Intent(this, NIneActivity::class.java))
         }
 
         // --- Logika Logout ---
@@ -54,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     sharedPref.edit { clear() }
 
                     // Pindah ke AuthActivity (Login)
-                    val intent = Intent(this, AuthActivity::class.java)
+                    val intent = Intent(this, BaseActivity::class.java)
                     // Flag ini memastikan user tidak bisa tekan 'back' kembali ke MainActivity
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alyah_apps.AuthActivity
 import com.example.alyah_apps.Home.pertemuan_2.SecondActivity
@@ -15,6 +16,8 @@ import com.example.alyah_apps.Home.pertemuan_3.ThirdActivity
 import com.example.alyah_apps.Home.pertemuan_4.FourthActivity
 import com.example.alyah_apps.Home.pertemuan_5.FifthActivity
 import com.example.alyah_apps.Home.pertemuan_7.SeventhActivity
+import com.example.alyah_apps.Home.pertemuna_9.NIneActivity
+import com.example.alyah_apps.R
 import com.example.alyah_apps.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -62,6 +65,11 @@ class HomeFragment : Fragment() {
         binding.btnToSixth.setOnClickListener {
             // Mengarah ke SeventhActivity sesuai instruksi sebelumnya
             startActivity(Intent(requireContext(), SeventhActivity::class.java))
+        }
+
+        // Pertemuan 9
+        binding.btnToNine.setOnClickListener {
+            startActivity(Intent(requireContext(), NIneActivity::class.java))
         }
 
         // 3. Logika Logout

@@ -73,14 +73,24 @@
         app:layout_constraintTop_toBottomOf="@+id/btnToFourth" />
 
     <Button
-        android:id="@+id/btnToSixth"
+        android:id="@+id/btnToSeventh"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Pertemuan 6"
+        android:text="Pertemuan 7"
         app:layout_constraintEnd_toEndOf="@+id/btnToFifth"
         app:layout_constraintStart_toStartOf="@+id/btnToFifth"
         app:layout_constraintTop_toBottomOf="@+id/btnToFifth" />
+
+    <Button
+        android:id="@+id/btnToNine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Pertemuan 9"
+        app:layout_constraintEnd_toEndOf="@+id/btnToSeventh"
+        app:layout_constraintStart_toStartOf="@+id/btnToSeventh"
+        app:layout_constraintTop_toBottomOf="@+id/btnToSeventh" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -92,6 +102,6 @@
         android:textColor="#FF0000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnToSixth" />
+        app:layout_constraintTop_toBottomOf="@+id/btnToNine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

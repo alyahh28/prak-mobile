@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alyahapps">
         <activity
+            android:name=".Home.pertemuna_9.NIneActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

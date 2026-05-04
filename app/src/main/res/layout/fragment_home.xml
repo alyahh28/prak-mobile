@@ -5,93 +5,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#11364A5F"
+    android:background="#F5F5F5"
     tools:context=".Home.HomeFragment">
 
+    <!-- 1. Background Header Artistik -->
+    <!-- Pastikan android:background mengarah ke file bg_header_wave yang benar -->
+    <View
+        android:id="@+id/background_header"
+        android:layout_width="0dp"
+        android:layout_height="220dp"
+        android:background="@drawable/bg_header_wave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 2. Toolbar Transparan -->
+    <!-- Menghilangkan background agar lengkungan wave di belakangnya terlihat -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@android:color/transparent"
+        app:title="Home"
         app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 3. Konten Teks di Atas Wave -->
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:text="Halo, Selamat Datang!!"
-        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <Button
-        android:id="@+id/btnToSecond"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:text="Pertemuan 2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnToThird"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Pertemuan 3"
-        app:layout_constraintEnd_toEndOf="@+id/btnToSecond"
-        app:layout_constraintStart_toStartOf="@+id/btnToSecond"
-        app:layout_constraintTop_toBottomOf="@+id/btnToSecond" />
-
-    <Button
-        android:id="@+id/btnToFourth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Pertemuan 4"
-        app:layout_constraintEnd_toEndOf="@+id/btnToThird"
-        app:layout_constraintStart_toStartOf="@+id/btnToThird"
-        app:layout_constraintTop_toBottomOf="@+id/btnToThird" />
-
-    <Button
-        android:id="@+id/btnToFifth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Pertemuan 5"
-        app:layout_constraintEnd_toEndOf="@+id/btnToFourth"
-        app:layout_constraintStart_toStartOf="@+id/btnToFourth"
-        app:layout_constraintTop_toBottomOf="@+id/btnToFourth" />
-
-    <Button
-        android:id="@+id/btnToSixth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Pertemuan 6"
-        app:layout_constraintEnd_toEndOf="@+id/btnToFifth"
-        app:layout_constraintStart_toStartOf="@+id/btnToFifth"
-        app:layout_constraintTop_toBottomOf="@+id/btnToFifth" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+    <TextView
+        android:id="@+id/textSub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Logout"
-        android:textColor="#FF0000"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Silahkan pilih pertemuan:"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnToSixth" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 4. ScrollView untuk Daftar Tombol -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <Button
+                android:id="@+id/btnToSecond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Pertemuan 2"
+                android:backgroundTint="?attr/colorPrimary"/>
+
+            <Button
+                android:id="@+id/btnToThird"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Pertemuan 3" />
+
+            <Button
+                android:id="@+id/btnToFourth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Pertemuan 4" />
+
+            <Button
+                android:id="@+id/btnToFifth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Pertemuan 5" />
+
+            <Button
+                android:id="@+id/btnToSixth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Pertemuan 6" />
+
+            <Button
+                android:id="@+id/btnToNine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Pertemuan 9" />
+
+            <Button
+                android:id="@+id/btnLogout"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:text="Logout"
+                android:textColor="#FF0000"
+                app:strokeColor="#FF0000"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
