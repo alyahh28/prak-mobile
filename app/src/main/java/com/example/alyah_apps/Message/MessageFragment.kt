@@ -1,10 +1,17 @@
 package com.example.alyah_apps.Message
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.alyah_apps.Message.tutorial.TutorialMessageActivity
+import com.example.alyah_apps.R
 import com.example.alyah_apps.databinding.FragmentMessageBinding
 
 class MessageFragment : Fragment() {
@@ -38,16 +45,37 @@ class MessageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 2. Inisialisasi Toolbar
-        binding.toolbar.title = "Message"
+        // Mengeset toolbar fragment sebagai ActionBar Activity
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
+        // Mengatur judul pada ActionBar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Message"
+        }
+
+        // Mengaktifkan Option Menu di Fragment
+        setHasOptionsMenu(true)
 
         // 3. Inisialisasi MessageAdapter (Custom Adapter)
-        // Menggunakan requireContext() dan data messageList yang sudah didefinisikan
         val adapter = MessageAdapter(requireContext(), messageList)
 
         // 4. Hubungkan ListView dengan Adapter
-        // Pastikan ID pada fragment_message.xml adalah listMessageItems
         binding.listMessageItems.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.message_toolbar_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_tutorial -> {
+                val intent = Intent(requireContext(), TutorialMessageActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroyView() {
