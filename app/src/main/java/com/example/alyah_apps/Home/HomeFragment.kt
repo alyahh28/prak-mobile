@@ -14,13 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alyah_apps.AuthActivity
 import com.example.alyah_apps.Home.pertemuan_10.TenthActivity
+import com.example.alyah_apps.Home.pertemuan_13.ThirteenthActivity
 import com.example.alyah_apps.Home.pertemuan_2.SecondActivity
 import com.example.alyah_apps.Home.pertemuan_3.ThirdActivity
 import com.example.alyah_apps.Home.pertemuan_4.FourthActivity
 import com.example.alyah_apps.Home.pertemuan_5.FifthActivity
 import com.example.alyah_apps.Home.pertemuan_7.SeventhActivity
 import com.example.alyah_apps.Home.pertemuna_9.NIneActivity
-import com.example.alyah_apps.Home.photo.PhotoAdapter
 import com.example.alyah_apps.data.api.CatFactApiClient
 import com.example.alyah_apps.data.api.PhotoApiClient
 import com.example.alyah_apps.databinding.FragmentHomeBinding
@@ -83,6 +83,11 @@ class HomeFragment : Fragment() {
             startActivity(Intent(requireContext(), TenthActivity::class.java))
         }
 
+        // Pertemuan 13
+        binding.btnP13.setOnClickListener {
+            startActivity(Intent(requireContext(), ThirteenthActivity::class.java))
+        }
+
         // 3. Logika Logout
         binding.btnLogout.setOnClickListener {
             showLogoutDialog()
@@ -90,7 +95,7 @@ class HomeFragment : Fragment() {
         binding.btnRefresh.setOnClickListener {
             loadCatFact()
         }
-        loadPhoto()
+
     }
 
     private fun loadCatFact() {
@@ -104,27 +109,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadPhoto() {
-        lifecycleScope.launch {
-            try {
-                val photos = PhotoApiClient.apiService.getPhotos()
-                val adapter = PhotoAdapter(photos)
-                binding.rvGallery.adapter = adapter
 
-                /** List Tampil Vertical*/
-                binding.rvGallery.layoutManager = LinearLayoutManager(requireContext())
-
-                /** List Tampil Horizontal */
-                //binding.rvGallery.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-                /** List Tampil Grid */
-                //binding.rvGallery.layoutManager = GridLayoutManager(requireContext(),2)
-
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Gagal memuat gambar", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private fun showLogoutDialog() {
         AlertDialog.Builder(requireContext())
