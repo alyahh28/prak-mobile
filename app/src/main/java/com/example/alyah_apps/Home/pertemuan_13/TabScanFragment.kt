@@ -1,7 +1,6 @@
 package com.example.alyah_apps.Home.pertemuan_13
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.example.alyah_apps.databinding.FragmentTabScanBinding
+import com.example.alyah_apps.utils.PermissionHelper
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -25,28 +27,30 @@ import java.util.concurrent.Executors
 
 class TabScanFragment : Fragment() {
 
-    private lateinit var cameraExecutor: ExecutorService
     private var _binding: FragmentTabScanBinding? = null
     private val binding get() = _binding!!
 
-    // Khusus hanya format QR Code
-    private val scanner = BarcodeScanning.getClient(BarcodeScannerOptions.Builder()
-        .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-        .build()
+    private lateinit var cameraExecutor: ExecutorService
+
+    // Inisialisasi scanner khusus format QR Code
+    private val scanner = BarcodeScanning.getClient(
+        BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .build()
     )
 
-    // Launcher untuk izin kamera
+    // Launcher izin kamera secara modern
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-            startCamera()
+            openCamera()
         } else {
-            Toast.makeText(context, "Izin kamera diperlukan untuk melakukan scan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Izin kamera diperlukan untuk fitur scan", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTabScanBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,90 +59,97 @@ class TabScanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi Executor
+        // Membuat single thread executor untuk penanganan kalkulasi di background
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Cek izin kamera saat view dibuat
-        if (hasCameraPermission()) {
-            startCamera()
-        } else {
-            permissionLauncher.launch(Manifest.permission.CAMERA)
+        // Logika klik tombol Capture sesuai permintaan Anda
+        binding.btnCapture.setOnClickListener {
+            if (!PermissionHelper.hasPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                )
+            ) {
+                PermissionHelper.requestPermission(
+                    permissionLauncher,
+                    Manifest.permission.CAMERA
+                )
+            } else {
+                openCamera()
+            }
         }
     }
 
-    private fun hasCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun startCamera() {
+    /**
+     * Membuka dan menginisialisasi kamera (Sebelumnya bernama startCamera)
+     */
+    private fun openCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener({
-            try {
-                val cameraProvider = cameraProviderFuture.get()
 
-                // Preview setup
-                val preview = Preview.Builder().build().apply {
-                    setSurfaceProvider(binding.previewView.surfaceProvider)
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            // Mengonfigurasi Preview Jendela Bidik Kamera (ViewFinder)
+            val preview = Preview.Builder().build().apply {
+                setSurfaceProvider(binding.previewView.surfaceProvider)
+            }
+
+            // Mengonfigurasi Analisis Frame Gambar untuk ML Kit Scanner
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .apply {
+                    setAnalyzer(cameraExecutor) { imageProxy ->
+                        processImageProxy(imageProxy)
+                    }
                 }
 
-                // Image Analyzer setup
-                val imageAnalyzer = ImageAnalysis.Builder()
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                    .apply {
-                        setAnalyzer(cameraExecutor) { imageProxy ->
-                            processImageProxy(imageProxy)
-                        }
-                    }
-
-                // Pilih kamera belakang
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-                // Unbind all dan bind ke lifecycle
+            try {
                 cameraProvider.unbindAll()
+
+                // Ikat komponen kamera ke siklus hidup Fragment ini
                 cameraProvider.bindToLifecycle(
-                    viewLifecycleOwner, 
-                    cameraSelector, 
-                    preview, 
+                    viewLifecycleOwner,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
                     imageAnalyzer
                 )
-
             } catch (e: Exception) {
-                Log.e("TabScan", "Gagal mulai kamera: ${e.message}", e)
+                Log.e("TabScanFragment", "Gagal memulai kamera internal", e)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private fun processImageProxy(imageProxy: androidx.camera.core.ImageProxy) {
+    @OptIn(ExperimentalGetImage::class)
+    private fun processImageProxy(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
-        if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-            scanner.process(image)
-                .addOnSuccessListener { barcodes ->
-                    if (barcodes.isNotEmpty()) {
-                        val rawValue = barcodes[0].rawValue
-                        activity?.runOnUiThread {
-                            binding.tvScanResult.text = "Hasil Scan: $rawValue"
-                        }
+        if (mediaImage == null) {
+            imageProxy.close()
+            return
+        }
+
+        val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+
+        scanner.process(image)
+            .addOnSuccessListener { barcodes ->
+                if (barcodes.isNotEmpty()) {
+                    val rawValue = barcodes[0].rawValue
+                    activity?.runOnUiThread {
+                        binding.tvScanResult.text = "Hasil: $rawValue"
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.e("TabScan", "Scan gagal: ${e.message}")
-                }
-                .addOnCompleteListener {
-                    imageProxy.close()
-                }
-        } else {
-            imageProxy.close()
-        }
+            }
+            .addOnFailureListener { e ->
+                Log.e("TabScanFragment", "Proses scan gagal", e)
+            }
+            .addOnCompleteListener {
+                imageProxy.close()
+            }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cameraExecutor.shutdown()
         _binding = null
+        scanner.close()
+        cameraExecutor.shutdown()
     }
 }
